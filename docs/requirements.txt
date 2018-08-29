@@ -1,0 +1,10 @@
+# pip install -r docs/requirements.txt --trusted-host pypi.pubyun.com -i http://pypi.pubyun.com/simple
+
+# macOS prepare: brew install cmake boost boost-python --with-python3
+dlib
+
+opencv-python
+
+
+# for develop
+pytest

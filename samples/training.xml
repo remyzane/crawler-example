@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<dataset>
+    <images>
+        <image file='1.jpg'>
+            <box top='83' left='337' width='85' height='65'/>
+        </image>
+        <image file='2.jpg'>
+            <box top='87' left='406' width='85' height='65'/>
+        </image>
+        <image file='3.jpg'>
+            <box top='73' left='229' width='85' height='65'/>
+        </image>
+        <image file='4.jpg'>
+            <box top='81' left='319' width='85' height='65'/>
+        </image>
+        <image file='5.jpg'>
+            <box top='80' left='305' width='85' height='65'/>
+        </image>
+    </images>
+</dataset>
