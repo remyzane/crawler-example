@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 
-test_path = os.path.realpath(os.path.join(__file__, '..'))
+from example import workspace
+
+test_dir = os.path.join(workspace, 'tests')

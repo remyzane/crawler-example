@@ -31,7 +31,7 @@ function main(splash, args)
     end)
 
     assert(splash:go(args.url))
-    splash:wait(2)
+    splash:wait(args.load_time)
 
     if image_name then
         table.insert(output, image_name)

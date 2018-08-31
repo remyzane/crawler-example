@@ -7,7 +7,8 @@ import base64
 import logging
 from flask import Flask, jsonify, request
 
-from example.graph import recognition
+from example import pattern_recognizer
+from example.utility import pattern_recognize_x_coordinate
 
 TMP_FOLDER = '/tmp/crawler-example/'
 if not os.path.exists(TMP_FOLDER):
@@ -43,9 +44,9 @@ def request_args(arg, default_value=None):
                 return request.json.get(arg, default_value)
 
 
-@app.route('/graph/recognition', methods=['POST'])
-def graph_recognition():
-    """ 辩识图片（滑动块位置）
+@app.route('/pattern/recognize_x_coordinate', methods=['POST'])
+def recognize_x_coordinate():
+    """ 识别图像中匹配区域的中心点的x轴坐标（一个）
 
     :post file: 要识别的图片
     :post arg file_format: 上传的文件格式 [ raw 原始格式 | base64 ascii 编码 ]
@@ -68,7 +69,8 @@ def graph_recognition():
             log.error('Unknown file format: %s' % file_format)
             return jsonify({'code': 'unknown_file_format',
                             'info': 'Unknown file format: %s' % file_format})
-        return jsonify({'code': 'ok', 'value': recognition(file_path)})
+        value = pattern_recognize_x_coordinate(pattern_recognizer, file_path)
+        return jsonify({'code': 'ok', 'value': value})
 
     except Exception as e:
         log.exception('Unknown Error')
