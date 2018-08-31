@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" 滑动块位置识别 WEB 接口服务 """
+""" 图像识别服务（开发模式） """
 import os
 import uuid
 import base64

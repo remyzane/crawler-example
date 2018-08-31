@@ -36,19 +36,28 @@ def pattern_recognize_x_coordinate(recognizer, image_path):
         return center.x
 
 
-def splash_get_lua_source(package, lua_file, js_file=None):
+def splash_get_lua_source(lua_file, js_file=None, folder=None):
+    """ 拼装 splash 的 lua 和 js
+    :param lua_file: lua 源文件
+    :param js_file: js 源文件
+    :param folder: 源文件所在目录
+    :return: lua 文件内容， 或拼装后的lua代码（指定了 js_file 时）
     """
-    function main(splash, args)
-  local aaa = [[
-    function get_document_title(){
-      return document.title;
-    }
-  ]]
-  splash:autoload(aaa)
+    if folder:
+        lua_file = os.path.join(folder, lua_file)
+        if js_file:
+            js_file = os.path.join(folder, js_file)
 
-    :param package:
-    :param lua_file:
-    :param js_file:
-    :return:
-    """
-    pass
+    with open(lua_file, 'r') as lua_f:
+        lua_src = lua_f.read()
+
+    if js_file:
+        with open(js_file, 'r') as js_f:
+            js_source = js_f.read()
+        lua_beg, lua_end = lua_src.split('function main(splash, args)')
+        lua_src = lua_beg + 'function main(splash, args)'
+        lua_src = lua_src + '\n\n    splash:autoload([['
+        lua_src = lua_src + js_source + '\n    ]])' + lua_end
+        return lua_src
+    else:
+        return lua_src

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" 验证图片（滑动块位置）识别 """
+""" 图像样本训练（执行一次即可） """
 import dlib
 from example import samples_xml, samples_svm
 
