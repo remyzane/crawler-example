@@ -18,6 +18,7 @@ def training():
     options.be_verbose = False
 
     dlib.train_simple_object_detector(samples_xml, samples_svm, options)
+    print('finished.')
 
 
 training()

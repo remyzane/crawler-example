@@ -5,16 +5,18 @@ import os
 import uuid
 import base64
 import logging
+import tempfile
 from flask import Flask, jsonify, request
 
 from example import pattern_recognizer
 from example.utility import pattern_recognize_x_coordinate
 
-TMP_FOLDER = '/tmp/crawler-example/'
+TMP_FOLDER = os.path.join(tempfile.gettempdir(), 'crawler-example')
 if not os.path.exists(TMP_FOLDER):
     os.mkdir(TMP_FOLDER)
 
 app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s [%(name)s] %(message)s')
 log = logging.getLogger(__name__)
 
 
@@ -49,6 +51,7 @@ def recognize_x_coordinate():
     """ 识别图像中匹配区域的中心点的x轴坐标（一个）
 
     :post file: 要识别的图片
+    :post arg scaled_width: 图片缩放后的宽度（图片在html中会缩放，为了方便业务开发，返回值也同比缩放）
     :post arg file_format: 上传的文件格式 [ raw 原始格式 | base64 ascii 编码 ]
         该参数可为调用方提供方便，如 splash:http_post 的 body 不支持 raw（会报python <-> lua 转换错误）
     """
@@ -69,7 +72,10 @@ def recognize_x_coordinate():
             log.error('Unknown file format: %s' % file_format)
             return jsonify({'code': 'unknown_file_format',
                             'info': 'Unknown file format: %s' % file_format})
-        value = pattern_recognize_x_coordinate(pattern_recognizer, file_path)
+        scaled_width = request_args('scaled_width')
+        scaled_width = int(scaled_width) if scaled_width else None
+        value = pattern_recognize_x_coordinate(pattern_recognizer, file_path, scaled_width)
+        log.debug('recognize_x_coordinate: %s', value)
         return jsonify({'code': 'ok', 'value': value})
 
     except Exception as e:

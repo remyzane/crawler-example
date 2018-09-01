@@ -18,22 +18,31 @@ def pattern_recognize(recognizer, image_path, target_number=0) -> rectangles:
     image = cv2.imread(image_path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # 识别图片
-    return recognizer(gray, target_number)
+    return recognizer(image=gray, upsample_num_times=target_number)
 
 
-def pattern_recognize_x_coordinate(recognizer, image_path):
+def pattern_recognize_x_coordinate(recognizer, image_path, scaled_width=None):
     """ 识别图像中匹配区域的中心点的x轴坐标（一个）
 
     :param recognizer: 识别器
     :param image_path: 要识别的图片地址
-    :return None|int: 匹配区域（矩形）的中心点的x轴坐标
+    :param scaled_width: 图片缩放后的宽度（图片在html中会缩放，为了方便业务开发，返回值也同比缩放）
+    :return None|int: 匹配区域（矩形）的中心点的x轴坐标（如果指定了缩放后的宽度，则返回值也同比缩放）
     """
-    result = pattern_recognize(recognizer, image_path, target_number=1)
+    # 加载图片
+    image = cv2.imread(image_path)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # 识别图片
+    result = recognizer(image=gray, upsample_num_times=1)
     # 返回结果
     if result:
         target = result[0]          # type: rectangle
         center = target.center()    # type: point
-        return center.x
+        if scaled_width:
+            __, width, __ = image.shape  # height, width, channels
+            return center.x * scaled_width / int(width)
+        else:
+            return center.x
 
 
 def splash_get_lua_source(lua_file, js_file=None, folder=None):
